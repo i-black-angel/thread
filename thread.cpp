@@ -29,14 +29,19 @@ Thread::~Thread()
 int Thread::start()
 {
 	_routine = on_thread_callback;
-#ifdef _WIN32
-	HANDLE handle = (HANDLE)_beginthreadex(NULL, 0, _routine, static_cast<void *>(this), 0, &threadID);
-#endif /* _WIN32 */
+#if defined(_WIN32) || defined(_WIN64)
+	unsigned int thread_id = 0;
+	HANDLE handle = (HANDLE)_beginthreadex(NULL, 0, _routine, static_cast<void *>(this), 0, &thread_id);
+	if (NULL == handle) {
+		std::cerr << "can't create thread" << std::endl;
+	}
+#else
 	int res = pthread_create(&_self, NULL, _routine, static_cast<void *>(this));
 	if (0 != res) {
-		std::cerr << "can't create thread : " << strerror(res);
+		std::cerr << "can't create thread: " << strerror(res) << std::endl;
 	}
-	return res;
+#endif /* _WIN32 */
+	return 0;
 }
 
 void Thread::exit()

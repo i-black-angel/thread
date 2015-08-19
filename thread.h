@@ -3,13 +3,16 @@
 
 #ifdef _WIN32
 #include <windows.h>
-typedef unsigned int (__CLR_OR_STD_CALL *thread_callback)(void *);
+typedef unsigned int (__stdcall *thread_callback)(void *);
 #else
 #include <pthread.h>
 typedef void * (*thread_callback)(void *pvoid);
 #endif /* _WIN32 */
 
-
+/** 
+ * Thread class
+ * 
+ */
 class Thread
 {
 public:
