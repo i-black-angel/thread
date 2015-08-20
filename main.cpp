@@ -23,8 +23,8 @@ using namespace std;
 class MyThread : public Thread
 {
 public:
-    MyThread() { }
-    virtual ~MyThread() { }
+    MyThread() { printf("mythread\n"); }
+    virtual ~MyThread() { printf("~mythread\n"); }
     virtual void run() {
 		pid_t pid = getpid();
         pthread_t tid = self();
@@ -74,22 +74,47 @@ public:
 	Cond _cond;
 };
 
-int main(int argc, char *argv[])
+class DoSomething : public IRunnable
 {
+public:
+    DoSomething() { printf("dosomething\n");}
+    virtual ~DoSomething() { printf("~dosomething\n"); }
+    virtual void run() {
+		for (int i = 0; i < 10; ++i) {
+			printf("%d\n", i);
+			usleep(50000);
+		}
+    }
+};
+
+
+void test() {
+	// must be very careful on object's lifetime
 	MyThread a;
 	a.start();
+}
+
+int main(int argc, char *argv[])
+{
+	// MyThread a;
+	// a.start();
 	
 	// DWORD id = GetCurrentProcessId();
 	
-	pid_t pid = getpid();
-	pthread_t tid = pthread_self();
-	printf("pid %lu tid %lu (0x%lX)\n",
-		   static_cast<unsigned long>(pid),
-		   static_cast<unsigned long>(tid),
-		   static_cast<unsigned long>(tid));
+	// pid_t pid = getpid();
+	// pthread_t tid = pthread_self();
+	// printf("pid %lu tid %lu (0x%lX)\n",
+	// 	   static_cast<unsigned long>(pid),
+	// 	   static_cast<unsigned long>(tid),
+	// 	   static_cast<unsigned long>(tid));
 
-	// struct msg *workq = new struct msg;
-	Test test;
-	test.test();
+	// // struct msg *workq = new struct msg;
+	// // Test test;
+	// // test.test();
+	test();
+	DoSomething ds;
+	Thread thread(ds);
+	thread.start();
+
 	pthread_exit(NULL);
 }
