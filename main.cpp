@@ -87,13 +87,15 @@ public:
     }
 };
 
-
+MyThread a;
 void test() {
 	// must be very careful on object's lifetime
-	MyThread a;
+	// MyThread a;
 	a.start();
+	a.detach();
 }
 
+DoSomething ds;
 int main(int argc, char *argv[])
 {
 	// MyThread a;
@@ -112,9 +114,10 @@ int main(int argc, char *argv[])
 	// // Test test;
 	// // test.test();
 	test();
-	DoSomething ds;
 	Thread thread(ds);
 	thread.start();
 
-	pthread_exit(NULL);
+	printf("main exit\n");
+	Thread::exit();
+	// pthread_exit(NULL);
 }

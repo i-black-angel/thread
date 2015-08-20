@@ -37,7 +37,7 @@ public:
 	
 	// activity
 	int start();
-	void exit();
+	static void exit();
 	int join();
 	int detach();
 	int cancel();
