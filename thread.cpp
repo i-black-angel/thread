@@ -31,8 +31,8 @@ Thread::Thread()
 	_runnable = NULL;
 }
 
-Thread::Thread(IRunnable &runnable) {
-	_runnable = &runnable;
+Thread::Thread(IRunnable *runnable) {
+	_runnable = runnable;
 }
 
 Thread::~Thread()

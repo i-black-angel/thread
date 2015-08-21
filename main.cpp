@@ -46,33 +46,6 @@ public:
     }
 };
 
-struct msg
-{
-    struct msg *next;
-};
-
-class Test
-{
-public:
-    Test() { }
-    virtual ~Test() { if (NULL != _work) { delete _work; _work = NULL; } }
-
-	void test() {
-		struct msg *mp;
-
-		for (; ; ) {
-			_mutex.lock();
-			while (NULL == _work) {
-				_cond.wait(_mutex);
-			}
-			_mutex.unlock();
-		}
-	}
-
-	struct msg *_work;
-	Mutex _mutex;
-	Cond _cond;
-};
 
 class DoSomething : public IRunnable
 {
@@ -87,19 +60,11 @@ public:
     }
 };
 
-MyThread a;
-void test() {
-	// must be very careful on object's lifetime
-	// MyThread a;
-	a.start();
-	a.detach();
-}
 
-DoSomething ds;
 int main(int argc, char *argv[])
 {
-	// MyThread a;
-	// a.start();
+	MyThread a;
+	a.start();
 	
 	// DWORD id = GetCurrentProcessId();
 	
@@ -113,7 +78,8 @@ int main(int argc, char *argv[])
 	// // struct msg *workq = new struct msg;
 	// // Test test;
 	// // test.test();
-	test();
+//	test();
+	DoSomething ds;
 	Thread thread(ds);
 	thread.start();
 

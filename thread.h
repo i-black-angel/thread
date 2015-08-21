@@ -28,7 +28,7 @@ class Thread
 {
 public:
     Thread();
-	Thread(IRunnable &runnable);
+	Thread(IRunnable *runnable);
     virtual ~Thread();
 	pthread_t self() const {
 		return this->_self;
