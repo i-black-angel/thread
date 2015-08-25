@@ -43,3 +43,12 @@ int Attr::getstacksize(size_t *stacksize) const {
 int Attr::setstacksize(size_t stacksize) {
 	return pthread_attr_setstacksize(&_attr, stacksize);
 }
+
+int Attr::getguardsize(size_t *guardsize) const
+{
+	return pthread_attr_getguardsize(&_attr, guardsize);
+}
+
+int Attr::setguardsize(size_t guardsize) {
+	return pthread_attr_setguardsize(&_attr, guardsize);
+}

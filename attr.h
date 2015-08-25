@@ -19,7 +19,8 @@ public:
 	int setstack(void *stackaddr, size_t stacksize);   // unsupported
 	int getstacksize(size_t *stacksize) const;
 	int setstacksize(size_t stacksize);
-
+	int getguardsize(size_t *guardsize) const;
+	int setguardsize(size_t guardsize);
 	pthread_attr_t *attr() { return &_attr; }
 private:
 	pthread_attr_t _attr;

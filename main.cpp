@@ -84,6 +84,10 @@ int main(int argc, char *argv[])
 	size_t getsize = 0;
 	attr.getstacksize(&getsize);
 	printf("stacksize: %lu\n", getsize);
+
+	size_t guardsize = 0;
+	attr.getguardsize(&guardsize);
+	printf("guardsize: %lu\n", guardsize);
 	// DWORD id = GetCurrentProcessId();
 	
 	// pid_t pid = getpid();
