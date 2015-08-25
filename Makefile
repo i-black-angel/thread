@@ -1,7 +1,7 @@
 TARGET = main
 CXXFLAGS = -Wall -g
 
-$(TARGET): main.o thread.o mutex.o cond.o rwlock.o
+$(TARGET): main.o thread.o mutex.o cond.o rwlock.o attr.o
 	$(CXX) -o $@ $^ -lpthread
 
 clean:

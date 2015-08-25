@@ -14,6 +14,7 @@
 #ifdef __GNUC__
 #include <unistd.h>
 #endif /* __GNUC__ */
+#include "attr.h"
 #include "thread.h"
 #include "mutex.h"
 #include "cond.h"
@@ -33,6 +34,14 @@ public:
 			   static_cast<unsigned long>(tid),
 			   static_cast<unsigned long>(tid));
 		// std::cout << tid << std::endl;
+
+		Attr attr;
+		printf("detachstate:%d\n", attr.getdetachstate());
+		// void *stackaddr = NULL;
+		size_t stacksize = 0;
+		attr.getstacksize(&stacksize);
+		printf("stack size: %lu\n", stacksize);
+		
     }
 };
 
@@ -63,6 +72,11 @@ public:
 
 int main(int argc, char *argv[])
 {
+	Attr attr;
+	size_t stacksize = 10 * 1024 * 1024;
+	attr.setstacksize(stacksize);
+	perror("setstacksize");
+	
 	MyThread a;
 	a.start();
 	
@@ -80,10 +94,19 @@ int main(int argc, char *argv[])
 	// // test.test();
 //	test();
 	DoSomething ds;
-	Thread thread(ds);
+	Thread thread(&ds);
 	thread.start();
 
+	// Attr attr;
+	// printf("detachstate:%d\n", attr.getdetachstate());
+	// void *stackaddr = NULL;
+	// size_t stacksize = 0;
+	// attr.getstacksize(&stacksize);
+	// printf("stack size: %luM\n", stacksize / 1024 / 1024);
+
 	printf("main exit\n");
-	Thread::exit();
+	// Thread::exit();
 	// pthread_exit(NULL);
+	getchar();
+	return 0;
 }
