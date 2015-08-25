@@ -24,21 +24,24 @@ void * on_runnable_callback(void *pvoid) {
 	return NULL;
 }
 
-Thread::Thread() 
+Thread::Thread(Attr *attr) 
 {
 	_self = 0;
 	_routine = NULL;
 	_runnable = NULL;
+	_attr = attr;
 }
 
-Thread::Thread(IRunnable *runnable) {
+Thread::Thread(IRunnable *runnable, Attr *attr) {
 	_runnable = runnable;
+	_attr = attr;
 }
 
 Thread::~Thread()
 {
     _routine = NULL;
 	_runnable = NULL;
+	_attr = NULL;
 }
 
 int Thread::start()
@@ -46,7 +49,10 @@ int Thread::start()
 	int res = 0;
 	if (NULL != _runnable) {
 		_routine = on_runnable_callback;
-		res = pthread_create(&_self, NULL, _routine, static_cast<void *>(_runnable));
+		const pthread_attr_t *thread_attr = NULL;
+		if (NULL != _attr)
+			thread_attr = _attr->attr();
+		res = pthread_create(&_self, thread_attr, _routine, static_cast<void *>(_runnable));
 		if (0 != res) {
 			std::cerr << "can't create thread: " << strerror(res) << std::endl;
 		}
@@ -60,7 +66,10 @@ int Thread::start()
 // 	}
 // #else
 	_routine = on_thread_callback;
-	res = pthread_create(&_self, NULL, _routine, static_cast<void *>(this));
+	const pthread_attr_t *thread_attr = NULL;
+	if (NULL != _attr)
+		thread_attr = _attr->attr();
+	res = pthread_create(&_self, thread_attr, _routine, static_cast<void *>(this));
 	if (0 != res) {
 		std::cerr << "can't create thread: " << strerror(res) << std::endl;
 	}

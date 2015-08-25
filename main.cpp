@@ -21,10 +21,11 @@
 
 using namespace std;
 
+
 class MyThread : public Thread
 {
 public:
-    MyThread() { printf("mythread\n"); }
+    MyThread(Attr *attr = NULL) : Thread(attr) { printf("mythread\n"); }
     virtual ~MyThread() { printf("~mythread\n"); }
     virtual void run() {
 		pid_t pid = getpid();
@@ -77,9 +78,12 @@ int main(int argc, char *argv[])
 	attr.setstacksize(stacksize);
 	perror("setstacksize");
 	
-	MyThread a;
+	MyThread a(&attr);
 	a.start();
-	
+
+	size_t getsize = 0;
+	attr.getstacksize(&getsize);
+	printf("stacksize: %lu\n", getsize);
 	// DWORD id = GetCurrentProcessId();
 	
 	// pid_t pid = getpid();

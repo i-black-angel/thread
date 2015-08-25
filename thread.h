@@ -9,6 +9,8 @@ typedef unsigned int (__stdcall *thread_callback)(void *);
 typedef void * (*thread_callback)(void *pvoid);
 #endif /* _WIN32 */
 
+#include "attr.h"				// thread attributation
+
 /**
  * IRunnable interface
  * 
@@ -27,8 +29,8 @@ public:
 class Thread
 {
 public:
-    Thread();
-	Thread(IRunnable *runnable);
+    Thread(Attr *attr = NULL);
+	Thread(IRunnable *runnable, Attr *attr = NULL);
     virtual ~Thread();
 	pthread_t self() const {
 		return this->_self;
@@ -51,6 +53,7 @@ private:
 	pthread_t _self;
 	thread_callback _routine;
 	IRunnable *_runnable;
+	Attr *_attr;
 };
 
 #endif /* _THREAD_H_ */
